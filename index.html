@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Hinder — Find Your Hoor | Halal Matchmaking &amp; Sunnah Courtship App</title>
+  <meta name="description" content="Hinder is the ultimate witty, halal matchmaking &amp; courtship web app powered by Netlify &amp; NeonDB Serverless Postgres. Find your Hoor, impress the Wali, and split kunafa 50/50." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950 min-h-screen flex flex-col pb-20 md:pb-6">
+
+  <!-- Full-Viewport Photorealistic HD Background Stage (assets/backgrounds/*) -->
+  <div id="hd-bg-stage" class="hd-bg-stage" style="background-image: url('assets/backgrounds/hero-rooftop.jpg');"></div>
+  <div class="hd-bg-overlay"></div>
+
+  <!-- Toast Notification Stack -->
+  <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 max-w-xs sm:max-w-sm pointer-events-none"></div>
+
+  <!-- Top Responsive Navigation Bar -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-slate-950/80 border-b border-emerald-800/50">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+      <!-- Brand Logo + Inline Favicon Emblem -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <button type="button" onclick="switchTab('discover')" class="flex items-center gap-2.5 text-left group focus:outline-none">
+          <div class="w-10 h-10 rounded-2xl overflow-hidden shadow-lg shadow-rose-950/50 shrink-0 group-hover:scale-105 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B" />
+      <stop offset="55%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="20%" y1="100%" x2="80%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48" />
+      <stop offset="55%" stop-color="#FB7185" />
+      <stop offset="100%" stop-color="#FBBF24" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="glow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <!-- Rounded Squircle App Icon Background -->
+  <rect x="6" y="6" width="116" height="116" rx="30" fill="url(#bgGrad)" stroke="#10B981" stroke-width="3" stroke-opacity="0.45" />
+  <!-- Subtle Inner Rub el Hizb Octagram Ring -->
+  <g opacity="0.14" stroke="#FBBF24" stroke-width="2" fill="none">
+    <rect x="26" y="26" width="76" height="76" rx="6" />
+    <rect x="26" y="26" width="76" height="76" rx="6" transform="rotate(45 64 64)" />
+  </g>
+  <!-- Halal Flame Silhouette -->
+  <path filter="url(#glow)" fill="url(#flameGrad)" d="M66 18 C66 18 98 44 98 74 C98 96 82 110 64 110 C46 110 30 96 30 74 C30 57 41 42 48 35 C46 45 51 52 57 54 C52 39 58 26 66 18 Z" />
+  <!-- Golden Crescent Moon Nested Inside the Flame -->
+  <path fill="url(#goldGrad)" d="M72 48 A22 22 0 1 0 90 80 A17 17 0 1 1 72 48 Z" />
+  <!-- 8-Pointed Noor Star -->
+  <g transform="translate(77, 56)">
+    <rect x="-5" y="-5" width="10" height="10" fill="#FEF08A" />
+    <rect x="-5" y="-5" width="10" height="10" fill="#FEF08A" transform="rotate(45)" />
+  </g>
+</svg>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xl sm:text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-rose-400 to-emerald-300">Hinder</span>
+              <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-900/90 text-amber-300 border border-amber-400/40">Find Your Hoor</span>
+            </div>
+            <p class="text-[10px] sm:text-xs text-emerald-300/80 truncate">HD Halal Matchmaking • Complete Half Your Deen</p>
+          </div>
+        </button>
+
+        <!-- Active Barakah Boost Countdown Pill -->
+        <div id="boost-status-pill" class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-400/20 border border-amber-400 text-amber-300 text-xs font-bold">
+          <span>⚡ 10x Noor:</span>
+          <span id="boost-timer-text">30:00</span>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1.5" aria-label="Main Navigation">
+        <button type="button" id="nav-btn-discover" onclick="switchTab('discover')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg shadow-emerald-900/50 transition-all">
+          <span>🔥</span>
+          <span>Find Your Hoor</span>
+        </button>
+        <button type="button" id="nav-btn-hoors" onclick="switchTab('hoors')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-emerald-200/80 hover:text-white hover:bg-emerald-900/40 transition-all">
+          <span>🌟</span>
+          <span>Top Hoors</span>
+        </button>
+        <button type="button" id="nav-btn-messages" onclick="switchTab('messages')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-emerald-200/80 hover:text-white hover:bg-emerald-900/40 transition-all">
+          <span>💬</span>
+          <span>Wali Chat</span>
+          <span id="nav-match-count" class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white">2</span>
+        </button>
+        <button type="button" id="nav-btn-profile" onclick="switchTab('profile')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-emerald-200/80 hover:text-white hover:bg-emerald-900/40 transition-all">
+          <span>🕌</span>
+          <span>My Deen &amp; VIP</span>
+        </button>
+        <button type="button" id="nav-btn-neondb" onclick="switchTab('neondb')" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium text-emerald-200/80 hover:text-white hover:bg-emerald-900/40 transition-all">
+          <span>🗄️</span>
+          <span>NeonDB Studio</span>
+          <span id="nav-sql-count" class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500 text-slate-950">2</span>
+        </button>
+      </nav>
+
+      <!-- Right Quick Actions -->
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="triggerBarakahBoost()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-rose-500 text-slate-950 font-extrabold text-xs shadow-md hover:brightness-110 transition-all flex items-center gap-1">
+          <span>⚡</span>
+          <span class="hidden sm:inline">Barakah Boost</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-4 pb-8">
+
+    <!-- ================================================================== -->
+    <!-- TAB 1: DISCOVER DECK ("FIND YOUR HOOR")                            -->
+    <!-- ================================================================== -->
+    <section id="view-discover" class="space-y-5">
+      <!-- Halal-o-Meter Niyyah Mode Switcher Bar + HD Background Scene Selector -->
+      <div class="bg-slate-950/80 backdrop-blur-xl border border-emerald-700/50 rounded-2xl p-3 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-amber-400 mr-1">🧭 Halal-o-Meter:</span>
+          <button type="button" id="niyyah-btn-all" onclick="setNiyyahFilter('all')" class="px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-400 to-rose-500 text-slate-950 shadow-md transition-all">
+            All Niyyahs ✨
+          </button>
+          <button type="button" id="niyyah-btn-nikah_ready" onclick="setNiyyahFilter('nikah_ready')" class="px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 hover:border-amber-400/50 transition-all">
+            Sunnah Speedrun (Nikah 💍)
+          </button>
+          <button type="button" id="niyyah-btn-chai_vibe" onclick="setNiyyahFilter('chai_vibe')" class="px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 hover:border-amber-400/50 transition-all">
+            Chai &amp; Vibe Check ☕
+          </button>
+          <button type="button" id="niyyah-btn-wali_approved" onclick="setNiyyahFilter('wali_approved')" class="px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 hover:border-amber-400/50 transition-all">
+            Mufti Approved (Wali Mode 🛡️)
+          </button>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[11px] font-bold text-emerald-300">🖼️ HD Background:</span>
+          <button type="button" id="bg-scene-btn-rooftop" onclick="setHdBackgroundScene('rooftop')" class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-bold text-[11px] shadow-sm transition-all">
+            🕌 Twilight Mosque Rooftop
+          </button>
+          <button type="button" id="bg-scene-btn-courtyard" onclick="setHdBackgroundScene('courtyard')" class="px-2.5 py-1 rounded-lg bg-slate-950/90 hover:bg-emerald-900/80 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium transition-all">
+            🫖 Riad Karak &amp; Kunafa
+          </button>
+          <button type="button" id="bg-scene-btn-bosphorus" onclick="setHdBackgroundScene('bosphorus')" class="px-2.5 py-1 rounded-lg bg-slate-950/90 hover:bg-emerald-900/80 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium transition-all">
+            🌅 Bosphorus Sunset
+          </button>
+        </div>
+      </div>
+
+      <div id="deck-stats-bar" class="text-xs text-amber-300 font-semibold px-1">
+        8 HD Profiles Nearby • 2 Matches • Passport: Dubai / Global Ummah
+      </div>
+
+      <!-- Responsive Grid: Left Filters | Center Swipe Deck | Right Assets Manager & Perks -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- Left Sidebar: Search & Fiqh Filters (3 cols on lg) -->
+        <aside class="lg:col-span-3 bg-slate-950/85 backdrop-blur-xl border border-emerald-800/60 rounded-3xl p-4 space-y-4 shadow-xl">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-extrabold text-white flex items-center gap-1.5">
+              <span>🔍</span>
+              <span>Rishta &amp; Hoor Filters</span>
+            </h3>
+            <button type="button" onclick="resetDeckFilters()" class="text-xs text-amber-400 hover:underline font-semibold">Reset</button>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div>
+              <label for="filter-search" class="block text-emerald-300 font-semibold mb-1">Keyword (City, Biryani, Job)</label>
+              <input id="filter-search" type="text" oninput="applyDeckFilters()" placeholder="e.g. Dubai, Kunafa, Lawyer..." class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-emerald-700/50 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400" />
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
+              <div>
+                <label for="filter-gender" class="block text-emerald-300 font-semibold mb-1">Looking For</label>
+                <select id="filter-gender" onchange="applyDeckFilters()" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-emerald-700/50 text-white focus:outline-none focus:border-amber-400">
+                  <option value="all">All (Hoors &amp; Habibis)</option>
+                  <option value="Sister">Sisters (Hoor Candidates)</option>
+                  <option value="Brother">Brothers (Qawwam Candidates)</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="filter-sect" class="block text-emerald-300 font-semibold mb-1">Tradition / Sect</label>
+                <select id="filter-sect" onchange="applyDeckFilters()" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-emerald-700/50 text-white focus:outline-none focus:border-amber-400">
+                  <option value="all">All Ummah</option>
+                  <option value="Sunni">Sunni</option>
+                  <option value="Shia">Shia</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-emerald-300 font-semibold mb-1">
+                <label for="filter-distance">Max Distance</label>
+                <span id="filter-distance-label" class="text-amber-300 font-bold">50 km</span>
+              </div>
+              <input id="filter-distance" type="range" min="5" max="100" value="50" oninput="applyDeckFilters()" class="w-full accent-amber-400 cursor-pointer" />
+            </div>
+
+            <!-- Ummah Passport Quick Teleport -->
+            <div class="pt-2 border-t border-emerald-800/50">
+              <span class="block text-amber-300 font-bold mb-2">✈️ Ummah Passport Teleport</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="changePassportCity('Dubai / Downtown')" class="px-2.5 py-1 rounded-lg bg-emerald-950 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium">🇦🇪 Dubai</button>
+                <button type="button" onclick="changePassportCity('Istanbul / Bosphorus')" class="px-2.5 py-1 rounded-lg bg-emerald-950 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium">🇹🇷 Istanbul</button>
+                <button type="button" onclick="changePassportCity('London / Knightsbridge')" class="px-2.5 py-1 rounded-lg bg-emerald-950 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium">🇬🇧 London</button>
+                <button type="button" onclick="changePassportCity('Kuala Lumpur')" class="px-2.5 py-1 rounded-lg bg-emerald-950 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium">🇲🇾 KL</button>
+                <button type="button" onclick="changePassportCity('Cairo / Zamalek')" class="px-2.5 py-1 rounded-lg bg-emerald-950 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/50 text-[11px] font-medium">🇪🇬 Cairo</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Center Column: Active Swipe Card + 5 Tinder Action Controls (6 cols on lg) -->
+        <div class="lg:col-span-6 flex flex-col items-center space-y-4">
+          <div id="deck-card-slot" class="w-full"></div>
+
+          <!-- 5 Iconic Tinder-Style Action Buttons -->
+          <div class="flex items-center justify-center gap-3 sm:gap-4 py-2">
+            <button type="button" onclick="handleRewindSwipe()" title="Tawbah Rewind (Shortcut: Z)" class="w-12 h-12 rounded-full bg-slate-950/90 border-2 border-amber-400/60 text-amber-300 hover:bg-amber-400 hover:text-slate-950 flex items-center justify-center text-lg font-bold shadow-lg transition-all hover:scale-110">
+              ⏪
+            </button>
+            <button type="button" onclick="handleSwipeAction('left')" title="Mashallah Next / Pass (Shortcut: ←)" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-950/90 border-2 border-rose-500 text-rose-400 hover:bg-rose-500 hover:text-white flex items-center justify-center text-2xl font-black shadow-xl transition-all hover:scale-110">
+              ✕
+            </button>
+            <button type="button" onclick="handleSwipeAction('super_noor')" title="Send Super Noor 🌟 (Shortcut: ↑)" class="w-14 h-14 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-rose-500 text-slate-950 flex items-center justify-center text-2xl font-black shadow-xl noor-glow transition-all hover:scale-110">
+              🌟
+            </button>
+            <button type="button" onclick="handleSwipeAction('right')" title="Halal Like 💚 (Shortcut: →)" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-950/90 border-2 border-emerald-400 text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 flex items-center justify-center text-2xl font-black shadow-xl transition-all hover:scale-110">
+              💚
+            </button>
+            <button type="button" onclick="triggerBarakahBoost()" title="Jummah Barakah Boost ⚡ (Shortcut: B)" class="w-12 h-12 rounded-full bg-slate-950/90 border-2 border-purple-400/70 text-purple-300 hover:bg-purple-500 hover:text-white flex items-center justify-center text-lg font-bold shadow-lg transition-all hover:scale-110">
+              ⚡
+            </button>
+          </div>
+
+          <p class="text-[11px] text-emerald-200/90 text-center bg-slate-950/75 px-3 py-1.5 rounded-full border border-emerald-800/50">
+            💡 Tip: Drag cards left/right or use keyboard keys <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">← Pass</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">↑ Super Noor</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">→ Halal Like</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">Z Rewind</kbd>
+          </p>
+        </div>
+
+        <!-- Right Sidebar: `assets/` Folder Custom HD Photo Manager & VIP Widget (3 cols on lg) -->
+        <aside class="lg:col-span-3 space-y-4">
+
+          <!-- Dedicated `assets/` Folder & Custom HD Photo Provision Box -->
+          <div class="bg-slate-950/85 backdrop-blur-xl border border-amber-400/50 rounded-3xl p-4 space-y-3 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-amber-400">📁 assets/ Folder Manager</span>
+              <button type="button" onclick="resetCustomProfilePhotos()" class="text-[11px] text-emerald-300 hover:underline font-semibold">Reset Defaults</button>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              All profile photos live in <code class="text-amber-300">assets/profiles/</code> and HD backgrounds live in <code class="text-amber-300">assets/backgrounds/</code>. Replace files there or swap any profile photo live below:
+            </p>
+
+            <div class="space-y-2 text-xs">
+              <label for="asset-target-profile" class="block text-emerald-300 font-semibold">1. Select Profile Slot</label>
+              <select id="asset-target-profile" class="w-full px-2.5 py-2 rounded-xl bg-slate-900 border border-emerald-700/60 text-white text-xs">
+                <option value="zoya_01">Zoya (assets/profiles/zoya.jpg)</option>
+                <option value="layla_02">Layla (assets/profiles/layla.jpg)</option>
+                <option value="nadia_03">Nadia (assets/profiles/nadia.jpg)</option>
+                <option value="tariq_04">Tariq (assets/profiles/tariq.jpg)</option>
+                <option value="amira_05">Amira (assets/profiles/amira.jpg)</option>
+                <option value="zayd_06">Zayd (assets/profiles/zayd.jpg)</option>
+                <option value="yasmin_07">Yasmin (assets/profiles/yasmin.jpg)</option>
+                <option value="hana_08">Hana (assets/profiles/hana.jpg)</option>
+              </select>
+
+              <label for="asset-file-upload" class="block text-emerald-300 font-semibold pt-1">2. Upload HD Photo from Device</label>
+              <input id="asset-file-upload" type="file" accept="image/*" onchange="handleCustomAssetUpload(event)" class="w-full text-[11px] text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-400 file:text-slate-950 hover:file:bg-amber-300 cursor-pointer" />
+
+              <label for="asset-custom-path" class="block text-emerald-300 font-semibold pt-1">Or Link Filename in <code class="text-amber-300">assets/profiles/</code></label>
+              <div class="flex gap-1.5">
+                <input id="asset-custom-path" type="text" placeholder="my_photo.jpg" class="flex-1 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white text-xs" />
+                <button type="button" onclick="assignCustomAssetFilename()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0">
+                  Link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-950/85 backdrop-blur-xl border border-emerald-800/60 rounded-3xl p-4 space-y-3 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-amber-400">🌟 Hinder Firdaus VIP</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Active</span>
+            </div>
+            <h3 class="text-sm font-bold text-white">Who Made Dua For You Today</h3>
+            <p class="text-xs text-slate-300">3 verified profiles in your area sent secret Noor signals after Fajr.</p>
+            <div class="space-y-2 pt-1">
+              <button type="button" onclick="switchTab('hoors')" class="w-full p-2.5 rounded-2xl bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-700/50 flex items-center justify-between text-xs transition-all">
+                <span class="font-semibold text-emerald-200">✨ View 6 Top Hoors of the Day</span>
+                <span class="text-amber-300 font-bold">→</span>
+              </button>
+              <button type="button" onclick="switchTab('messages')" class="w-full p-2.5 rounded-2xl bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-700/50 flex items-center justify-between text-xs transition-all">
+                <span class="font-semibold text-emerald-200">🛡️ Open Wali Chaperone Chat</span>
+                <span class="text-amber-300 font-bold">→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live NeonDB Persistence Mini-Card -->
+          <div class="bg-slate-950/85 backdrop-blur-xl border border-emerald-800/60 rounded-3xl p-4 space-y-2.5 shadow-xl">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>NeonDB Serverless</span>
+              </span>
+              <span class="text-[10px] font-mono text-amber-300">pg_pooler: 11ms</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-relaxed">
+              Every swipe, Super Noor, and Wali chat is logged with parameterized PostgreSQL queries via <code class="text-amber-300">/.netlify/functions/api</code>.
+            </p>
+            <button type="button" onclick="switchTab('neondb')" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-emerald-950 text-amber-300 border border-amber-400/40 text-xs font-bold transition-all">
+              Inspect Live SQL Log &amp; Schema
+            </button>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 2: TOP HOORS & HABIBIS OF THE DAY                              -->
+    <!-- ================================================================== -->
+    <section id="view-hoors" class="hidden space-y-5">
+      <div class="bg-gradient-to-r from-emerald-950/95 via-slate-950/95 to-rose-950/85 backdrop-blur-xl border border-amber-400/40 rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xl">
+        <div>
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-400 text-slate-950">🌟 HINDER JANNAH+ EXCLUSIVE</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">Curated Hoors &amp; Habibis of the Day</h2>
+          <p class="text-xs sm:text-sm text-emerald-200/90 mt-1">Handpicked by our Sunnah Compatibility Algorithm with full HD studio photography in <code class="text-amber-300">assets/profiles/</code>.</p>
+        </div>
+        <button type="button" onclick="triggerBarakahBoost()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-rose-500 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg shrink-0">
+          ⚡ Boost My Noor Ranking
+        </button>
+      </div>
+
+      <div id="top-hoors-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 3: MESSAGES & WALI CHAPERONE CHAT                              -->
+    <!-- ================================================================== -->
+    <section id="view-messages" class="hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 bg-slate-950/90 backdrop-blur-xl border border-emerald-800/50 rounded-3xl p-3 sm:p-5 shadow-2xl min-h-[580px]">
+        <div class="lg:col-span-4 flex flex-col border-b lg:border-b-0 lg:border-r border-emerald-800/50 pb-4 lg:pb-0 lg:pr-4">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-base font-extrabold text-white">💚 Halal Matches &amp; Rishtas</h2>
+            <span class="text-xs text-amber-300 font-semibold">Wali Supervised</span>
+          </div>
+          <div id="matches-sidebar-list" class="space-y-2 overflow-y-auto max-h-60 lg:max-h-[480px] pr-1"></div>
+        </div>
+
+        <div class="lg:col-span-8 flex flex-col justify-between min-h-[440px]">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-emerald-800/50">
+            <div id="chat-active-header"></div>
+            <div class="flex items-center gap-2">
+              <button type="button" id="wali-toggle-btn" onclick="toggleWaliChaperone()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-400 text-slate-950 shadow-sm transition-all">
+                🛡️ Wali Chaperone: ON
+              </button>
+            </div>
+          </div>
+
+          <div id="chat-messages-thread" class="flex-1 overflow-y-auto py-4 px-2 space-y-2 max-h-[360px]"></div>
+
+          <div class="pt-3 border-t border-emerald-800/50 space-y-2.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="insertSunnahRizz()" class="px-3 py-1.5 rounded-xl bg-emerald-950 hover:bg-emerald-900 text-amber-300 border border-amber-400/40 text-xs font-bold transition-all">
+                ✨ Generate Sunnah Rizz Line
+              </button>
+              <button type="button" onclick="sendKunafaProposalCard()" class="px-3 py-1.5 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-500/40 text-xs font-bold transition-all">
+                🍮💍 Send Kunafa &amp; Mehr Proposal Card
+              </button>
+            </div>
+
+            <form onsubmit="sendChatMessageFromForm(event)" class="flex items-center gap-2">
+              <input id="chat-message-input" type="text" placeholder="Write a respectful message (Uncle Mahmood is watching)..." class="flex-1 px-4 py-3 rounded-2xl bg-slate-900 border border-emerald-700/60 text-white text-xs sm:text-sm placeholder-slate-500 focus:outline-none focus:border-amber-400" />
+              <button type="submit" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold text-xs sm:text-sm shadow-lg hover:brightness-110 transition-all shrink-0">
+                Send Salaam ➤
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 4: MY PROFILE & HINDER FIRDAUS VIP MEMBERSHIP                  -->
+    <!-- ================================================================== -->
+    <section id="view-profile" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 bg-slate-950/90 backdrop-blur-xl border border-emerald-800/50 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-extrabold text-white">🕌 Edit Your Halal CV &amp; Niyyah Profile</h2>
+              <p class="text-xs text-emerald-300/80">Changes sync automatically to NeonDB (`hinder_users`) and your local session.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">✓ Noor Verified</span>
+          </div>
+
+          <form onsubmit="saveUserProfileForm(event)" class="space-y-3.5 text-xs sm:text-sm">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="sm:col-span-2">
+                <label for="prof-name" class="block text-emerald-300 font-semibold mb-1">Display Name</label>
+                <input id="prof-name" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white" />
+              </div>
+              <div>
+                <label for="prof-age" class="block text-emerald-300 font-semibold mb-1">Age</label>
+                <input id="prof-age" type="number" min="18" max="99" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white" />
+              </div>
+            </div>
+
+            <div>
+              <label for="prof-city" class="block text-emerald-300 font-semibold mb-1">Current City / Masjids Frequented</label>
+              <input id="prof-city" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white" />
+            </div>
+
+            <div>
+              <label for="prof-headline" class="block text-emerald-300 font-semibold mb-1">Witty Niyyah Headline</label>
+              <input id="prof-headline" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="prof-mehr" class="block text-amber-300 font-semibold mb-1">💍 Mehr Pledge / Expectation</label>
+                <input id="prof-mehr" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white" />
+              </div>
+              <div>
+                <label for="prof-biryani" class="block text-rose-300 font-semibold mb-1">🍛 Biryani Fiqh Stance</label>
+                <input id="prof-biryani" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white" />
+              </div>
+            </div>
+
+            <div>
+              <label for="prof-bio" class="block text-emerald-300 font-semibold mb-1">About My Deen &amp; Dunya</label>
+              <textarea id="prof-bio" rows="3" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 text-white"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold text-sm shadow-lg hover:brightness-110 transition-all">
+              💾 Save Profile &amp; Sync to NeonDB
+            </button>
+          </form>
+        </div>
+
+        <div class="lg:col-span-5 space-y-4">
+          <div class="bg-slate-950/90 backdrop-blur-xl border border-emerald-800/50 rounded-3xl p-5 shadow-xl space-y-3">
+            <h3 class="text-lg font-extrabold text-white">👑 Hinder Membership Tiers</h3>
+            <p class="text-xs text-slate-300">Upgrade your courtship barakah with Zero-Ribaa transparent tiers.</p>
+
+            <div id="tier-card-mumin_free" onclick="selectMembershipTier('mumin_free')" class="p-4 rounded-2xl bg-slate-900/70 border border-emerald-800/50 cursor-pointer">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-white text-sm">🌱 Mu'min Basic (Free Fisabilillah)</span>
+                <span class="text-xs font-bold text-emerald-300">$0 / forever</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">25 Halal Swipes/day, Standard Wali Chaperone Mode, Basic Biryani Filter.</p>
+            </div>
+
+            <div id="tier-card-sabr_gold" onclick="selectMembershipTier('sabr_gold')" class="p-4 rounded-2xl bg-slate-900/70 border border-emerald-800/50 cursor-pointer">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-amber-300 text-sm">✨ Hinder Gold (Sabr &amp; Shukr Edition)</span>
+                <span class="text-xs font-bold text-amber-300">$9.99 / mo</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">Unlimited Tawbah Rewinds, 5 Super Noors/day, See Who Made Dua For You.</p>
+            </div>
+
+            <div id="tier-card-firdaus_vip" onclick="selectMembershipTier('firdaus_vip')" class="p-4 rounded-2xl bg-gradient-to-br from-emerald-900/90 to-slate-900 border-2 border-amber-400 cursor-pointer">
+              <div class="flex justify-between items-center">
+                <span class="font-extrabold text-white text-sm">🌟 Hinder Firdaus VIP (Find Your Hoor Pro)</span>
+                <span class="text-xs font-extrabold bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">ACTIVE</span>
+              </div>
+              <p class="text-xs text-emerald-200 mt-1">Global Ummah Passport, Priority Jummah Boosts, Direct Rishta CV Export for Ammi &amp; Baba.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 5: NEONDB SERVERLESS POSTGRES CLOUD STUDIO                     -->
+    <!-- ================================================================== -->
+    <section id="view-neondb" class="hidden space-y-5">
+      <div class="bg-slate-950/90 backdrop-blur-xl border border-emerald-700/50 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-800/60 pb-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold mb-2">
+              <span>🟢 NeonDB Serverless PostgreSQL + Netlify Functions</span>
+            </div>
+            <h2 class="text-2xl font-black text-white">Hinder × NeonDB Cloud Database Studio</h2>
+            <p class="text-xs sm:text-sm text-emerald-200/80 mt-0.5">
+              Configured for Netlify Serverless Functions (<code class="text-amber-300">netlify/functions/api.js</code>) using <code class="text-amber-300">@neondatabase/serverless</code> HTTP driver.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="testNeonConnection()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-extrabold text-xs shadow-lg hover:brightness-110 transition-all">
+              ⚡ Ping NeonDB Pooler
+            </button>
+            <button type="button" onclick="copySqlSchemaToClipboard()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/40 font-bold text-xs transition-all">
+              📋 Copy SQL Schema
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="neon-conn-input" class="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
+            DATABASE_URL (Neon Serverless Pooled Connection String)
+          </label>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input id="neon-conn-input" type="text" class="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-emerald-700/60 font-mono text-xs text-amber-300" />
+            <button type="button" onclick="testNeonConnection()" class="px-4 py-2.5 rounded-xl bg-emerald-800/80 hover:bg-emerald-700 text-white text-xs font-bold shrink-0">
+              Verify &amp; Sync
+            </button>
+          </div>
+        </div>
+
+        <div id="neon-row-stats" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div class="space-y-2">
+            <h3 class="text-sm font-extrabold text-white flex items-center justify-between">
+              <span>⚡ Real-Time SQL Transaction Log</span>
+              <span class="text-[11px] text-emerald-400 font-normal">Auto-captures swipes, matches &amp; chats</span>
+            </h3>
+            <div id="neon-sql-logs" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+          </div>
+
+          <div class="space-y-2">
+            <h3 class="text-sm font-extrabold text-white flex items-center justify-between">
+              <span>📄 NeonDB Schema (<code class="text-amber-300">db/schema.sql</code>)</span>
+              <span class="text-[11px] text-slate-400 font-normal">Included in Netlify ZIP</span>
+            </h3>
+            <pre id="neon-schema-code" class="p-3.5 rounded-2xl bg-slate-900 border border-emerald-800/60 font-mono text-[11px] text-emerald-300 overflow-x-auto max-h-80 leading-relaxed">CREATE TABLE IF NOT EXISTS hinder_users (
+  id VARCHAR(64) PRIMARY KEY,
+  display_name VARCHAR(120) NOT NULL,
+  age INTEGER NOT NULL,
+  city VARCHAR(120) NOT NULL,
+  photo_url VARCHAR(255) NOT NULL,
+  niyyah_mode VARCHAR(64) NOT NULL,
+  mehr_tier VARCHAR(80) NOT NULL,
+  biryani_stance VARCHAR(160) NOT NULL,
+  wali_status VARCHAR(160) NOT NULL,
+  noor_score INTEGER NOT NULL DEFAULT 95
+);
+
+CREATE TABLE IF NOT EXISTS hinder_swipes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  swiper_id VARCHAR(64) NOT NULL,
+  target_id VARCHAR(64) NOT NULL REFERENCES hinder_users(id),
+  direction VARCHAR(24) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Match Celebration Modal -->
+  <div id="match-modal" class="hidden fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-gradient-to-b from-emerald-950 via-slate-900 to-slate-950 border-2 border-amber-400/70 rounded-3xl p-6 shadow-2xl">
+      <div id="match-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-emerald-800/60 px-2 py-1.5" aria-label="Mobile Navigation">
+    <div class="grid grid-cols-5 gap-1 max-w-md mx-auto">
+      <button type="button" id="mob-btn-discover" onclick="switchTab('discover')" class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-amber-300 bg-emerald-900/60 font-semibold text-[11px]">
+        <span class="text-base">🔥</span>
+        <span>Swipes</span>
+      </button>
+      <button type="button" id="mob-btn-hoors" onclick="switchTab('hoors')" class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-emerald-300/70 font-medium text-[11px]">
+        <span class="text-base">🌟</span>
+        <span>Top Hoors</span>
+      </button>
+      <button type="button" id="mob-btn-messages" onclick="switchTab('messages')" class="relative flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-emerald-300/70 font-medium text-[11px]">
+        <span class="text-base">💬</span>
+        <span>Chats</span>
+        <span id="mob-match-count" class="absolute top-1 right-3 px-1.5 rounded-full text-[9px] font-black bg-rose-500 text-white">2</span>
+      </button>
+      <button type="button" id="mob-btn-profile" onclick="switchTab('profile')" class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-emerald-300/70 font-medium text-[11px]">
+        <span class="text-base">🕌</span>
+        <span>My Deen</span>
+      </button>
+      <button type="button" id="mob-btn-neondb" onclick="switchTab('neondb')" class="flex flex-col items-center justify-center py-1.5 px-2 rounded-xl text-emerald-300/70 font-medium text-[11px]">
+        <span class="text-base">🗄️</span>
+        <span>NeonDB</span>
+      </button>
+    </div>
+  </nav>
+
+  <script src="/app.js"></script>
+</body>
+</html>

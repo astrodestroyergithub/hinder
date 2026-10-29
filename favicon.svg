@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B" />
+      <stop offset="55%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="20%" y1="100%" x2="80%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48" />
+      <stop offset="55%" stop-color="#FB7185" />
+      <stop offset="100%" stop-color="#FBBF24" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FEF08A" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="glow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <!-- Rounded Squircle App Icon Background -->
+  <rect x="6" y="6" width="116" height="116" rx="30" fill="url(#bgGrad)" stroke="#10B981" stroke-width="3" stroke-opacity="0.45" />
+  <!-- Subtle Inner Rub el Hizb Octagram Ring -->
+  <g opacity="0.14" stroke="#FBBF24" stroke-width="2" fill="none">
+    <rect x="26" y="26" width="76" height="76" rx="6" />
+    <rect x="26" y="26" width="76" height="76" rx="6" transform="rotate(45 64 64)" />
+  </g>
+  <!-- Halal Flame Silhouette -->
+  <path filter="url(#glow)" fill="url(#flameGrad)" d="M66 18 C66 18 98 44 98 74 C98 96 82 110 64 110 C46 110 30 96 30 74 C30 57 41 42 48 35 C46 45 51 52 57 54 C52 39 58 26 66 18 Z" />
+  <!-- Golden Crescent Moon Nested Inside the Flame -->
+  <path fill="url(#goldGrad)" d="M72 48 A22 22 0 1 0 90 80 A17 17 0 1 1 72 48 Z" />
+  <!-- 8-Pointed Noor Star -->
+  <g transform="translate(77, 56)">
+    <rect x="-5" y="-5" width="10" height="10" fill="#FEF08A" />
+    <rect x="-5" y="-5" width="10" height="10" fill="#FEF08A" transform="rotate(45)" />
+  </g>
+</svg>

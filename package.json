@@ -1,0 +1,16 @@
+{
+  "name": "hinder-find-your-hoor",
+  "version": "2.4.0",
+  "description": "Hinder — The Halal Matchmaking & Sunnah Courtship Web Platform powered by Netlify & NeonDB Serverless Postgres",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.38.0"
+  }
+}

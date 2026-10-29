@@ -1,0 +1,115 @@
+/* Hinder — Find Your Hoor | HD Photography & Responsive Stylesheet */
+:root {
+  --emerald-deep: #022c22;
+  --emerald-mid: #064e3b;
+  --emerald-bright: #10b981;
+  --gold-noor: #f59e0b;
+  --rose-flame: #f43f5e;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #040d0b;
+  color: #f8fafc;
+}
+
+/* Fixed Full-Viewport HD Background Photography Layer */
+.hd-bg-stage {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: background-image 0.6s ease-in-out;
+  transform: scale(1.02);
+}
+
+/* Rich Cinematic Glass Overlay so UI cards pop with crisp contrast */
+.hd-bg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(2, 18, 14, 0.72) 0%, rgba(4, 24, 19, 0.82) 55%, rgba(2, 12, 10, 0.94) 100%),
+    radial-gradient(circle at 20% 15%, rgba(16, 185, 129, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(244, 63, 94, 0.14) 0%, transparent 45%);
+  backdrop-filter: blur(3px);
+}
+
+/* Card Stack & Swipe Physics */
+.swipe-card {
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
+  will-change: transform, opacity;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.swipe-card.dragging {
+  transition: none !important;
+  cursor: grabbing !important;
+}
+
+.swipe-card.fly-right {
+  transform: translate3d(135%, 24px, 0) rotate(22deg) !important;
+  opacity: 0 !important;
+}
+
+.swipe-card.fly-left {
+  transform: translate3d(-135%, 24px, 0) rotate(-22deg) !important;
+  opacity: 0 !important;
+}
+
+.swipe-card.fly-up {
+  transform: translate3d(0, -135%, 0) scale(1.06) !important;
+  opacity: 0 !important;
+}
+
+.swipe-stamp {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(6, 78, 59, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.45);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.65);
+}
+
+@keyframes noorPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
+  50% { box-shadow: 0 0 22px 6px rgba(245, 158, 11, 0.28); }
+}
+
+.noor-glow {
+  animation: noorPulse 2.6s infinite;
+}
+
+@keyframes waveBounce {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+.wave-bar-active {
+  animation: waveBounce 0.65s ease-in-out infinite;
+}
